@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback and Grades - PlagiScan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .feedback-section .feedback-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feedback-section .feedback-item:last-child {
+            border-bottom: none;
+        }
+
+        .feedback-section .feedback-item h3 {
+            color: #007BFF;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .feedback-section .feedback-item p {
+            color: #666;
+            margin: 0;
+        }
+
+        .grades-section table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .grades-section table th,
+        .grades-section table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .grades-section table th {
+            background: #007BFF;
+            color: white;
+        }
+
+        .grades-section table tr:hover {
+            background: #f9f9f9;
+        }
+        
+
+        /* Navigation Buttons CSS */
+        /* .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation-buttons button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .navigation-buttons button:hover {
+            background: #0056b3;
+        }
+
+        .navigation-buttons button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        } */
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f5f7fa;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Feedback and Grades</h1>
+        <!-- Profile Icon and Dropdown Menu -->
+        <div class="profile-dropdown">
+            <div class="profile-icon" onclick="toggleDropdown()">
+                👤 <!-- You can replace this with an icon or image -->
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="StudentProfile.html">Account Details</a>
+                <a href="login.html" onclick="signIn()">Sign In</a>
+                <a href="login.html" onclick="signOut()">Sign Out</a>
+                <a href="EditProfile.html">Edit Account</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Feedback Section -->
+        <div class="section feedback-section">
+            <h2>Feedback</h2>
+            <div id="feedbackList">
+                <!-- Feedback items will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Grades Section -->
+        <div class="section grades-section">
+            <h2>Grades</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="gradesTable">
+                    <!-- Grades will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons
+    <div class="navigation-buttons">
+        <button id="prevButton" onclick="navigatePrevious()">Previous</button>
+        <button id="nextButton" onclick="navigateNext()">Next</button>
+    </div> -->
+
+    <script>
+        // Sample feedback data
+        const feedbackData = [
+            {
+                from: "Project Guide",
+                message: "Great work on the recent task! Your analysis was thorough and well-presented."
+            },
+            {
+                from: "Project Co-ordinator",
+                message: "Please ensure all future submissions are made before the deadline."
+            }
+        ];
+
+        // Sample grades data
+        const gradesData = [
+            {
+                task: "Task 1 - Research Proposal",
+                grade: "A",
+                remarks: "Excellent research and presentation."
+            },
+            {
+                task: "Task 2 - Code Implementation",
+                grade: "B+",
+                remarks: "Good effort, but some improvements are needed in documentation."
+            },
+            {
+                task: "Task 3 - Final Report",
+                grade: "A-",
+                remarks: "Well-written report with minor formatting issues."
+            }
+        ];
+
+        // Function to display feedback
+        function displayFeedback() {
+            const feedbackList = document.getElementById('feedbackList');
+            feedbackList.innerHTML = ""; // Clear previous feedback
+
+            feedbackData.forEach(feedback => {
+                const feedbackItem = document.createElement('div');
+                feedbackItem.classList.add('feedback-item');
+                feedbackItem.innerHTML = `
+                    <h3>From: ${feedback.from}</h3>
+                    <p>${feedback.message}</p>
+                `;
+                feedbackList.appendChild(feedbackItem);
+            });
+        }
+
+        // Function to display grades
+        function displayGrades() {
+            const gradesTable = document.getElementById('gradesTable');
+            gradesTable.innerHTML = ""; // Clear previous grades
+
+            gradesData.forEach(grade => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${grade.task}</td>
+                    <td>${grade.grade}</td>
+                    <td>${grade.remarks}</td>
+                `;
+                gradesTable.appendChild(row);
+            });
+        }
+
+        // Display feedback and grades on page load
+        displayFeedback();
+        displayGrades();
+
+        // // Navigation Functionality
+        // const pageSequence = [
+        //     'student_home.html',
+        //     'ProjectTask.html',
+        //     'ProjectGuide.html',
+        //     'ProjectCoordinator.html',
+        //     'FeedbackGrades.html',
+        //     'StudentProfile.html',
+        //     'EditProfile.html'
+        // ];
+
+        // const currentPage = window.location.pathname.split('/').pop();
+        // const currentIndex = pageSequence.indexOf(currentPage);
+
+        // function navigatePrevious() {
+        //     if (currentIndex > 0) {
+        //         window.location.href = pageSequence[currentIndex - 1];
+        //     }
+        // }
+
+        // function navigateNext() {
+        //     if (currentIndex < pageSequence.length - 1) {
+        //         window.location.href = pageSequence[currentIndex + 1];
+        //     }
+        // }
+
+        // Disable Previous button if on the first page
+        if (currentIndex === 0) {
+            document.getElementById('prevButton').disabled = true;
+        }
+
+        // Disable Next button if on the last page
+        if (currentIndex === pageSequence.length - 1) {
+            document.getElementById('nextButton').disabled = true;
+        }
+
+        // Profile Dropdown Functionality
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.classList.toggle('show');
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.profile-icon')) {
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            }
+        };
+
+        // Function to handle Sign In
+        function signIn() {
+            alert("Sign In functionality will be implemented here.");
+            window.location.href = "login.html";
+            // Redirect to a sign-in page or show a sign-in modal
+        }
+
+        // Function to handle Sign Out
+        function signOut() {
+            alert("Sign Out functionality will be implemented here.");
+            // Clear session and redirect to the login page
+            window.location.href = "login.html"; // Replace with your login page
+        }
+    </script>
+    <!-- Back Button -->
+    <a class="back-button" href="javascript:history.back()">⬅ Back</a>
+
+    <script>
+        function openModal() {
+            document.getElementById("taskModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("taskModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>

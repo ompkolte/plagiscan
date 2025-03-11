@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Co-ordinator - PlagiScan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .interaction-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 15px;
+        }
+
+        .interaction-section button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .interaction-section button:hover {
+            background: #0056b3;
+        }
+
+        .task-submission-section input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .task-submission-section button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .task-submission-section button:hover {
+            background: #218838;
+        }
+
+        .deadline-panel {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .deadline-panel h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .deadline-panel p {
+            color: #856404;
+            margin: 0;
+        }
+
+        .submitted-files-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .submitted-files-section ul li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .submitted-files-section ul li:last-child {
+            border-bottom: none;
+        }
+
+        .submitted-files-section ul li a {
+            color: #007BFF;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .submitted-files-section ul li a:hover {
+            color: #0056b3;
+        }
+
+        /* Navigation Buttons CSS */
+        /* .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation-buttons button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .navigation-buttons button:hover {
+            background: #0056b3;
+        }
+
+        .navigation-buttons button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        } */
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f5f7fa;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Project Co-ordinator</h1>
+        <!-- Profile Icon and Dropdown Menu -->
+        <div class="profile-dropdown">
+            <div class="profile-icon" onclick="toggleDropdown()">
+                👤 <!-- You can replace this with an icon or image -->
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="StudentProfile.html">Account Details</a>
+                <a href="login.html" onclick="signIn()">Sign In</a>
+                <a href="login.html" onclick="signOut()">Sign Out</a>
+                <a href="EditProfile.html">Edit Account</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Interaction Section -->
+        <div class="section interaction-section">
+            <h2>Interaction with Students/Guides</h2>
+            <textarea id="message" placeholder="Type your message or query here..."></textarea>
+            <button onclick="sendMessage()">Send Message</button>
+        </div>
+
+        <!-- Task Submission Section -->
+        <div class="section task-submission-section">
+            <h2>Submit Task</h2>
+            <div class="deadline-panel">
+                <h3>Deadline: February 28, 2025</h3>
+                <p>Please submit your task before the deadline.</p>
+            </div>
+            <input type="file" id="taskFile">
+            <button onclick="submitTask()">Submit Task</button>
+        </div>
+    </div>
+
+    <!-- Submitted Files Section -->
+    <div class="container">
+        <div class="section submitted-files-section">
+            <h2>Submitted Files</h2>
+            <ul id="submittedFilesList">
+                <!-- Submitted files will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons
+    <div class="navigation-buttons">
+        <button id="prevButton" onclick="navigatePrevious()">Previous</button>
+        <button id="nextButton" onclick="navigateNext()">Next</button>
+    </div> -->
+
+    <script>
+        // Array to store submitted files
+        let submittedFiles = [];
+
+        // Function to send a message to the guide
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            if (message.trim() === "") {
+                alert("Please enter a message.");
+                return;
+            }
+            alert("Message sent to the guide: " + message);
+            document.getElementById('message').value = ""; // Clear the textarea
+        }
+
+        // Function to submit a task
+        function submitTask() {
+            const file = document.getElementById('taskFile').files[0];
+            if (!file) {
+                alert("Please select a file to submit.");
+                return;
+            }
+
+            // Add the file to the submitted files list
+            submittedFiles.push({
+                name: file.name,
+                url: URL.createObjectURL(file),
+            });
+
+            // Update the submitted files list
+            updateSubmittedFilesList();
+
+            alert("Task submitted successfully!");
+            document.getElementById('taskFile').value = ""; // Clear the file input
+        }
+
+        // Function to update the submitted files list
+        function updateSubmittedFilesList() {
+            const filesList = document.getElementById('submittedFilesList');
+            filesList.innerHTML = ""; // Clear the list
+
+            submittedFiles.forEach((file, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${file.name}</span>
+                    <a href="${file.url}" download="${file.name}">Download</a>
+                `;
+                filesList.appendChild(li);
+            });
+        }
+
+        // // Navigation Functionality
+        // const pageSequence = [
+        //     'student_home.html',
+        //     'ProjectTask.html',
+        //     'ProjectGuide.html',
+        //     'ProjectCoordinator.html',
+        //     'FeedbackGrades.html',
+        //     'StudentProfile.html',
+        //     'EditProfile.html'
+        // ];
+
+        // const currentPage = window.location.pathname.split('/').pop();
+        // const currentIndex = pageSequence.indexOf(currentPage);
+
+        // function navigatePrevious() {
+        //     if (currentIndex > 0) {
+        //         window.location.href = pageSequence[currentIndex - 1];
+        //     }
+        // }
+
+        // function navigateNext() {
+        //     if (currentIndex < pageSequence.length - 1) {
+        //         window.location.href = pageSequence[currentIndex + 1];
+        //     }
+        // }
+
+        // Disable Previous button if on the first page
+        if (currentIndex === 0) {
+            document.getElementById('prevButton').disabled = true;
+        }
+
+        // Disable Next button if on the last page
+        if (currentIndex === pageSequence.length - 1) {
+            document.getElementById('nextButton').disabled = true;
+        }
+
+        // Profile Dropdown Functionality
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.classList.toggle('show');
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.profile-icon')) {
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            }
+        };
+
+        // Function to handle Sign In
+        function signIn() {
+            alert("Sign In functionality will be implemented here.");
+            // Redirect to a sign-in page or show a sign-in modal
+        }
+
+        // Function to handle Sign Out
+        function signOut() {
+            alert("Sign Out functionality will be implemented here.");
+            // Clear session and redirect to the login page
+            window.location.href = "login.html"; // Replace with your login page
+        }
+    </script>
+    <!-- Back Button -->
+    <a class="back-button" href="javascript:history.back()">⬅ Back</a>
+
+    <script>
+        function openModal() {
+            document.getElementById("taskModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("taskModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>

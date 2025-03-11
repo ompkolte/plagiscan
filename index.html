@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlagiScan - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            margin: 0;
+            background: #f5f7fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #65809d, #65809d);
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar ul li:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+            width: calc(100% - 560px); /* Adjusted for right menubar */
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .main-content h1 {
+            font-size: 26px;
+            color: #333;
+        }
+
+        .main-content p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* Mission & Vision Section */
+        .mission-vision {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            /* animation: slideIn 1s ease-in-out; */
+        }
+
+        .mission-vision::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            /* background: rgba(255, 255, 255, 0.5); */
+            border-radius: 20px;
+            z-index: 1;
+            /* filter: blur(10px); */
+        }
+
+        .mission-vision h2 {
+            font-size: 24px;
+            color: #000000;
+            margin-bottom: 15px;
+            text-align: center;
+            /* animation: fadeIn 2s ease-in-out; */
+        }
+
+        .mission-vision h3 {
+            font-size: 20px;
+            color: #007BFF;
+            margin-bottom: 10px;
+            /* animation: fadeIn 2.5s ease-in-out; */
+        }
+
+        .mission-vision p {
+            font-size: 16px;
+            color: #000000;
+            line-height: 1.6;
+            /* animation: fadeIn 3s ease-in-out; */
+        }
+
+        .mission-vision ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mission-vision ul li {
+            font-size: 16px;
+            color: #000000;
+            margin-bottom: 10px;
+            /* animation: fadeIn 3.5s ease-in-out; */
+        }
+
+        .mission-vision ul li::before {
+            content: "🌟";
+            margin-right: 10px;
+        }
+
+        /* Right Menubar */
+        .right-sidebar {
+            width: 200px;
+            background: linear-gradient(135deg, #65809d, #65809d); /* Same as left sidebar */
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: fixed;
+            right: 0;
+            top: 0;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+            /* transition: all 0.3s ease-in-out; */
+        }
+
+        .right-sidebar h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .right-sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .right-sidebar ul li {
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .right-sidebar ul li:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Profile Icon and Dropdown */
+        /* .profile-icon {
+            position: absolute;
+            top: 20px;
+            right: 50px;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 200px;
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown-menu ul li {
+            padding: 12px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu ul li:hover {
+            background: #f1f1f1;
+        }
+
+        .dropdown-menu ul li a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        } */
+
+        /* Logout Button */
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 30px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #b02a37;
+            transform: scale(1.05);
+        }
+
+        /* Popup Box */
+        .popup-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            width: 350px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .popup-box h3 {
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: #333;
+            text-align: center;
+        }
+
+        .popup-box input,
+        .popup-box textarea,
+        .popup-box input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .popup-box input:focus,
+        .popup-box textarea:focus,
+        .popup-box input[type="date"]:focus {
+            border-color: #007BFF;
+        }
+
+        .popup-box textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .popup-box button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        .popup-box button:hover {
+            background: #0056b3;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            position: absolute;
+            top:23px;
+            right: 15px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f5f7fa;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #34495e;
+        }
+    
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .submissions-list {
+    background: rgb(240, 3, 42);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    display: none; /* Hidden by default */
+    position: fixed; /* Position it as a popup */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Ensure it appears above other content */
+    width: 80%; /* Adjust width as needed */
+    max-width: 600px; /* Maximum width */
+    max-height: 80vh; /* Maximum height */
+    overflow-y: auto; /* Add scroll if content overflows */
+}
+        /* Submissions List */
+        .submissions-list {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .submissions-list h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .submissions-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .submissions-list ul li {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .submissions-list ul li span {
+            flex: 1;
+        }
+
+        .submissions-list ul li button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .submissions-list ul li button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body onload="checkLoginStatus()">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>PlagiScan</h2>
+        <ul id="menuList">
+            <!-- Dynamic menu items will be added here -->
+        </ul>
+        <button class="logout-btn" onclick="logoutUser()">Logout</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Welcome to PlagiScan Dashboard</h1>
+        <p id="userRole">User Role: </p>
+
+        <!-- Mission & Vision Section -->
+        <div class="mission-vision">
+            <h2>🚀 Mission & Vision</h2>
+            <h3>🌟 VISION</h3>
+            <p>To be a new age learning center for holistic development of students into professional engineers, to cater to the changing needs of techno-society.</p>
+            <h3>🎯 MISSION</h3>
+            <ul>
+                <li>To provide new age infrastructural facilities blended with skill-based curriculum and activity-based pedagogical approaches to develop competitive engineering professionals to solve real-world problems.</li>
+                <li>To prepare students for lifelong learning by transforming educational practices.</li>
+                <li>To promote ethical and moral values by involving students in community services.</li>
+                <li>To promote entrepreneurship and managerial skills by strengthening industry-institute interaction.</li>
+            </ul>
+        </div>
+
+        <!-- Submissions List for Students -->
+        <!-- <div class="submissions-list" id="submissionsList" style="display: none;">
+            <h3>📋 Your Submissions</h3>
+            <ul id="submissions"> -->
+                <!-- Submissions will be dynamically added here -->
+            <!-- </ul>
+        </div>
+    </div> -->
+
+    <!-- Submissions List for Students -->
+<div class="submissions-list" id="submissionsList">
+    <h3>📋 Your Submissions</h3>
+    <button onclick="toggleSubmissionsList()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 16px; cursor: pointer;">✖️</button>
+    <ul id="submissions">
+        <!-- Submissions will be dynamically added here -->
+    </ul>
+</div>
+    <!-- Right Menubar -->
+    <div class="right-sidebar" id="rightSidebar">
+        <h2>Actions</h2>
+        <ul id="rightMenuList">
+            <!-- Dynamic right menu items will be added here -->
+        </ul>
+        <!-- Profile Icon and Dropdown Menu -->
+        <div class="profile-dropdown">
+            <div class="profile-icon" onclick="toggleDropdown()">
+                👤 <!-- You can replace this with an icon or image -->
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="StudentProfile.html">Account Details</a>
+                <a href="login.html" onclick="signIn()">Sign In</a>
+                <a href="login.html" onclick="signOut()">Sign Out</a>
+                <a href="EditProfile.html">Edit Account</a>
+            </div>
+        </div>
+        <!-- Profile Icon and Dropdown
+        <div class="profile-icon" onclick="toggleDropdown()">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <ul>
+                <li><a id="accountDetailsLink" href="StudentProfile.html">👤 Account Details</a></li>
+                <li><a id="editProfileLink" href="EditProfile.html">⚙️ Edit Profile</a></li>
+                <li onclick="logoutUser()">🚪 Sign Out</li>
+            </ul>
+        </div> -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        Operation Successful!
+    </div>
+
+    <!-- Add Notice Popup -->
+    <div class="popup-box" id="addNoticeBox">
+        <h3>📢 Add Notice</h3>
+        <textarea id="noticeText" placeholder="Enter notice here..."></textarea>
+        <button onclick="saveNotice()">Save Notice</button>
+        <button onclick="closePopup('addNoticeBox')">Close</button>
+    </div>
+
+    <!-- Add Assignment Popup -->
+    <div class="popup-box" id="addAssignmentBox">
+        <h3>📝 Add Assignment</h3>
+        <input type="text" id="assignmentTitle" placeholder="Assignment Title">
+        <input type="file" id="assignmentFile">
+        <input type="date" id="assignmentDeadline">
+        <button onclick="saveAssignment()">Save Assignment</button>
+        <button onclick="closePopup('addAssignmentBox')">Close</button>
+    </div>
+
+    <script>
+        // Global variables to store submissions, notices, and assignments
+        let submissions = [];
+        let notices = [];
+        let assignments = [];
+
+        function checkLoginStatus() {
+            const userType = localStorage.getItem('userType');
+            
+            if (!userType) {
+                window.location.href = 'login.html';  // Redirect if not logged in
+            } else {
+                document.getElementById('userRole').textContent = `User Role: ${userType}`;
+                generateMenu(userType);
+                generateRightMenu(userType);
+                updateProfileLinks(userType);
+                if (userType === 'student') {
+                    loadSubmissions();
+                }
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('userType');  // Clear session
+            window.location.href = 'login.html';  // Redirect to login
+        }
+
+        function generateMenu(userType) {
+            const menuList = document.getElementById('menuList');
+            menuList.innerHTML = ''; // Clear previous menu
+
+            let menuItems = [];
+
+            if (userType === 'student') {
+                menuItems = [
+                    { text: '🏠 Home', link: 'home.html' },
+                    { text: '📋 Project Tasks', link: 'ProjectTask.html' },
+                    { text: '👨‍🏫 Project Guide', link: 'ProjectGuide.html' },
+                    // { text: '📌 Project Coordinator', link: 'ProjectCoordinator.html' },
+                    { text: '📝 Feedback & Grades', link: 'FeedbackGrades.html' },
+                    { text: '👤 Profile', link: 'StudentProfile.html' },
+                    { text: '⚙️ Settings', link: 'EditProfile.html' }
+                ];
+            } else if (userType === 'guide') {
+                menuItems = [
+                    { text: '🏠 Home', link: 'home.html' },
+                    { text: '👥 My Groups', link: 'MyGroups.html' },
+                    { text: '🔍 Plagiarism Detection', link: 'PlagiarismDetection.html' },
+                    { text: '📝 Feedback & Grading', link: 'FeedbackGrading.html' },
+                    { text: '👤 Profile', link: 'StudentProfile.html' },
+                    { text: '⚙️ Settings', link: 'EditProfile.html' }
+                ];
+            } else if (userType === 'project-coordinator') {
+                menuItems = [
+                    { text: '🏠 Home', link: 'home.html' },
+                    { text: '👥 My  Groups', link: 'MyGroups.html' },
+                    { text: '💬 Interaction with Guide/Student', link: 'InteractionProjectCoordinator.html' },
+                    { text: '🔍 Plagiarism Detection', link: 'PlagiarismDetection.html' },
+                    { text: '📝 Feedback & Grading', link: 'FeedbackGrading.html' },
+                    { text: '👤 Profile', link: 'StudentProfile.html' },
+                    { text: '⚙️ Settings', link: 'EditProfile.html' }
+                ];
+            }
+
+            menuItems.forEach(item => {
+                let li = document.createElement('li');
+                li.innerHTML = `<a href="${item.link}" style="text-decoration: none; color: inherit;">${item.text}</a>`;
+                menuList.appendChild(li);
+            });
+        }
+
+        function generateRightMenu(userType) {
+            const rightMenuList = document.getElementById('rightMenuList');
+            rightMenuList.innerHTML = ''; // Clear previous menu
+
+            let rightMenuItems = [];
+
+            if (userType === 'student') {
+                rightMenuItems = [
+                    { text: '📋 Check Your Submissions', action: 'checkSubmissions' }
+                ];
+            } else if (userType === 'guide' || userType === 'project-coordinator') {
+                rightMenuItems = [
+                    { text: '📢 Add Notice', action: 'addNotice' },
+                    { text: '📝 Add Assignment', action: 'addAssignment' }
+                ];
+            }
+
+            rightMenuItems.forEach(item => {
+                let li = document.createElement('li');
+                li.innerHTML = item.text;
+                li.onclick = () => handleRightMenuItemClick(item.action);
+                rightMenuList.appendChild(li);
+            });
+        }
+
+        function updateProfileLinks(userType) {
+            const accountDetailsLink = document.getElementById('accountDetailsLink');
+            const editProfileLink = document.getElementById('editProfileLink');
+
+            if (userType === 'student') {
+                accountDetailsLink.href = 'StudentProfile.html';
+                editProfileLink.href = 'EditProfile.html';
+            } else if (userType === 'guide') {
+                accountDetailsLink.href = 'GuideProfile.html';
+                editProfileLink.href = 'EditGuideProfile.html';
+            } else if (userType === 'project-coordinator') {
+                accountDetailsLink.href = 'CoordinatorProfile.html';
+                editProfileLink.href = 'EditCoordinatorProfile.html';
+            }
+        }
+
+        function handleRightMenuItemClick(action) {
+            if (action === 'checkSubmissions') {
+                showSubmissionsList();
+            } else if (action === 'addNotice') {
+                showAddNoticeBox();
+            } else if (action === 'addAssignment') {
+                showAddAssignmentBox();
+            }
+        }
+
+        function handleRightMenuItemClick(action) {
+    if (action === 'checkSubmissions') {
+        toggleSubmissionsList(); // Toggle the visibility of the submissions list
+    } else if (action === 'addNotice') {
+        showAddNoticeBox();
+    } else if (action === 'addAssignment') {
+        showAddAssignmentBox();
+    }
+}
+
+function toggleSubmissionsList() {
+    const submissionsList = document.getElementById('submissionsList');
+    if (submissionsList.style.display === 'block') {
+        submissionsList.style.display = 'none'; // Hide the submissions list
+    } else {
+        submissionsList.style.display = 'block'; // Show the submissions list
+        loadSubmissions(); // Load submissions if not already loaded
+    }
+}
+        function showSubmissionsList() {
+            const submissionsList = document.getElementById('submissionsList');
+            submissionsList.style.display = 'block';
+            
+        }
+
+        function loadSubmissions() {
+            const submissionsContainer = document.getElementById('submissions');
+            submissionsContainer.innerHTML = ''; // Clear previous submissions
+
+            // Example submissions (replace with actual data from backend)
+            const exampleSubmissions = [
+                { title: 'Submission 1', deadline: '2025-02-01', status: 'Pending' },
+                { title: 'Submission 2', deadline: '2025-02-15', status: 'Submitted' },
+                { title: 'Submission 3', deadline: '2025-02-28', status: 'Pending' }
+            ];
+
+            exampleSubmissions.forEach((submission, index) => {
+                let li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${submission.title} - Deadline: ${submission.deadline} - Status: ${submission.status}</span>
+                `;
+                submissionsContainer.appendChild(li);
+            });
+        }
+
+        function showAddNoticeBox() {
+            document.getElementById('addNoticeBox').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function showAddAssignmentBox() {
+            document.getElementById('addAssignmentBox').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function saveNotice() {
+            const noticeText = document.getElementById('noticeText').value;
+
+            if (noticeText) {
+                notices.push(noticeText);
+                closePopup('addNoticeBox');
+                showSuccessMessage();
+            } else {
+                alert('Please enter a notice.');
+            }
+        }
+
+        function saveAssignment() {
+            const assignmentTitle = document.getElementById('assignmentTitle').value;
+            const assignmentFile = document.getElementById('assignmentFile').files[0];
+            const assignmentDeadline = document.getElementById('assignmentDeadline').value;
+
+            if (assignmentTitle && assignmentFile && assignmentDeadline) {
+                const assignment = {
+                    title: assignmentTitle,
+                    file: assignmentFile.name,
+                    deadline: assignmentDeadline
+                };
+                assignments.push(assignment);
+                closePopup('addAssignmentBox');
+                showSuccessMessage();
+            } else {
+                alert('Please fill all fields.');
+            }
+        }
+
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function showSuccessMessage() {
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 2000);
+        }
+
+         function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+          if (!event.target.matches('.profile-icon')) {
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                if (dropdownMenu.style.display === 'block') {
+                    dropdownMenu.style.display = 'none';
+                }
+            }
+        }; 
+
+        
+        document.getElementById('overlay').addEventListener('click', () => {
+            closePopup('addNoticeBox');
+            closePopup('addAssignmentBox');
+        });
+        // Profile Dropdown Functionality
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.classList.toggle('show');
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.profile-icon')) {
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            }
+        };
+
+        // Function to handle Sign In
+        function signIn() {
+            alert("Sign In functionality will be implemented here.");
+            // Redirect to a sign-in page or show a sign-in modal
+        }
+
+        // Function to handle Sign Out
+        function signOut() {
+            alert("Sign Out functionality will be implemented here.");
+            // Clear session and redirect to the login page
+            window.location.href = "login.html"; // Replace with your login page
+        }
+    </script>
+    
+    
+</body>
+</html>

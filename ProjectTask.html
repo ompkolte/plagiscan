@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Tasks - PlagiScan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+    <style>
+        /* Your existing CSS styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background: #f5f7fa;
+            color: #333;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #34495e;
+        }
+        .header {
+            background: linear-gradient(135deg, #65809d, #65809d);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .container {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Left Side (Chat and File Upload) */
+        .left-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Right Side (Calendar) */
+        .right-side {
+            flex: 2;
+        }
+
+        .chat-section, .file-section, .calendar-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .chat-section h2, .file-section h2, .calendar-section h2 {
+            margin-top: 0;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .chat-box {
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .chat-input button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background: #0056b3;
+        }
+
+        .file-upload {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .file-upload:hover {
+            background: #f0f0f0;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload label {
+            cursor: pointer;
+            color: #007BFF;
+            font-weight: bold;
+        }
+
+        .file-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-list ul li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-list ul li:last-child {
+            border-bottom: none;
+        }
+
+        .file-list ul li a {
+            color: #007BFF;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .file-list ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .file-list ul li button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .file-list ul li button:hover {
+            background: #b02a37;
+        }
+
+        /* Calendar Section */
+        #calendar {
+            height: 700px; /* Increased height */
+            width: 100%; /* Full width */
+        }
+
+        /* Navigation Buttons CSS */
+        /* .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation-buttons button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .navigation-buttons button:hover {
+            background: #0056b3;
+        }
+
+        .navigation-buttons button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        } */
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f5f7fa;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Project Tasks</h1>
+        <!-- Profile Icon and Dropdown Menu -->
+        <div class="profile-dropdown">
+            <div class="profile-icon" onclick="toggleDropdown()">
+                👤 <!-- You can replace this with an icon or image -->
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="StudentProfile.html">Account Details</a>
+                <a href="login.html" onclick="signIn()">Sign In</a>
+                <a href="login.html" onclick="signOut()">Sign Out</a>
+                <a href="EditProfile.html">Edit Account</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Side (Chat and File Upload) -->
+        <div class="left-side">
+            <!-- Chat Section -->
+            <div class="chat-section">
+                <h2>Team Interaction</h2>
+                <div class="chat-box" id="chatBox">
+                    <!-- Chat messages will appear here -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Type a message...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+
+            <!-- File Upload Section -->
+            <div class="file-section">
+                <h2>File Upload</h2>
+                <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.mp3,.zip">
+                    <label for="fileInput">Click to Upload Files (PDF, Images, Audio, ZIP)</label>
+                </div>
+                <div class="file-list">
+                    <ul id="fileList">
+                        <!-- Uploaded files will appear here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side (Calendar) -->
+        <div class="right-side">
+            <div class="calendar-section">
+                <h2>Schedule</h2>
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons
+    <div class="navigation-buttons">
+        <button id="prevButton" onclick="navigatePrevious()">Previous</button>
+        <button id="nextButton" onclick="navigateNext()">Next</button>
+    </div> -->
+
+    <!-- FullCalendar Script -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+    <script>
+        // Chat Functionality
+        const chatBox = document.getElementById('chatBox');
+        const chatInput = document.getElementById('chatInput');
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `You: ${message}`;
+                chatBox.appendChild(messageElement);
+                chatInput.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the latest message
+            }
+        }
+
+        // File Upload Functionality
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+
+        fileInput.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files.length > 0) {
+                for (const file of files) {
+                    const listItem = document.createElement('li');
+                    const fileLink = document.createElement('a');
+                    fileLink.textContent = file.name;
+                    fileLink.href = URL.createObjectURL(file);
+                    fileLink.download = file.name; // Make the file downloadable
+                    listItem.appendChild(fileLink);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.onclick = () => listItem.remove();
+                    listItem.appendChild(deleteButton);
+
+                    fileList.appendChild(listItem);
+                }
+            }
+        });
+
+        // Calendar Functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                editable: true, // Allow events to be editable
+                events: [], // Start with an empty event list
+                dateClick: function (info) {
+                    // Add a new event on date click
+                    const title = prompt('Enter event title:');
+                    if (title) {
+                        calendar.addEvent({
+                            title: title,
+                            start: info.dateStr,
+                            allDay: true
+                        });
+                    }
+                },
+                eventClick: function (info) {
+                    // Edit or delete an event on click
+                    const action = prompt('Enter "edit" to update the event or "delete" to remove it:');
+                    if (action === 'edit') {
+                        const newTitle = prompt('Enter new event title:');
+                        if (newTitle) {
+                            info.event.setProp('title', newTitle);
+                        }
+                    } else if (action === 'delete') {
+                        info.event.remove();
+                    }
+                }
+            });
+            calendar.render();
+        });
+
+        // // Navigation Functionality
+        // const pageSequence = [
+        //     'student_home.html',
+        //     'ProjectTask.html',
+        //     'ProjectGuide.html',
+        //     'ProjectCoordinator.html',
+        //     'FeedbackGrades.html',
+        //     'StudentProfile.html',
+        //     'EditProfile.html'
+        // ];
+
+        // const currentPage = window.location.pathname.split('/').pop();
+        // const currentIndex = pageSequence.indexOf(currentPage);
+
+        // function navigatePrevious() {
+        //     if (currentIndex > 0) {
+        //         window.location.href = pageSequence[currentIndex - 1];
+        //     }
+        // }
+
+        // function navigateNext() {
+        //     if (currentIndex < pageSequence.length - 1) {
+        //         window.location.href = pageSequence[currentIndex + 1];
+        //     }
+        // }
+
+        // if (currentIndex === 0) {
+        //     document.getElementById('prevButton').disabled = true;
+        // }
+
+        // if (currentIndex === pageSequence.length - 1) {
+        //     document.getElementById('nextButton').disabled = true;
+        // }
+
+        // Profile Dropdown Functionality
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.classList.toggle('show');
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.profile-icon')) {
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            }
+        };
+
+        // Function to handle Sign In
+        function signIn() {
+            alert("Sign In functionality will be implemented here.");
+            // Redirect to a sign-in page or show a sign-in modal
+        }
+
+        // Function to handle Sign Out
+        function signOut() {
+            alert("Sign Out functionality will be implemented here.");
+            // Clear session and redirect to the login page
+            window.location.href = "login.html"; // Replace with your login page
+        }
+    </script>
+    <!-- Back Button -->
+    <a class="back-button" href="javascript:history.back()">⬅ Back</a>
+
+    <script>
+        function openModal() {
+            document.getElementById("taskModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("taskModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>

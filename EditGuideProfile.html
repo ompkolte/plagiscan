@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - PlagiScan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #007BFF;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-group button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .success-message {
+            text-align: center;
+            color: green;
+            margin-top: 20px;
+            display: none;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #34495e;
+        }
+        /* Navigation Buttons CSS */
+        /*.navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation-buttons button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .navigation-buttons button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .navigation-buttons button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        } */
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f5f7fa;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Edit Profile</h1>
+        <!-- Profile Icon and Dropdown Menu -->
+        <div class="profile-dropdown">
+            <div class="profile-icon" onclick="toggleDropdown()">
+                👤 <!-- You can replace this with an icon or image -->
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="GuideProfile.html">Account Details</a>
+                <a href="login.html" onclick="signIn()">Sign In</a>
+                <a href="login.html" onclick="signOut()">Sign Out</a>
+                <a href="EditGuideProfile.html">Edit Account</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Edit Profile Form -->
+        <form id="editProfileForm" onsubmit="return saveProfile(event)">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="middleName">Middle Name:</label>
+                <input type="text" id="middleName">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact:</label>
+                <input type="text" id="contact" required>
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio:</label>
+                <textarea id="bio"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="year">Year:</label>
+                <input type="number" id="year" min="1" max="4">
+            </div>
+            <div class="form-group">
+                <label for="department">Department:</label>
+                <input type="text" id="department">
+            </div>
+            <div class="form-group">
+                <label for="profileImage">Profile Image:</label>
+                <input type="file" id="profileImage" accept="image/*">
+            </div>
+            <div class="form-group">
+                <button type="submit">Save Changes</button>
+            </div>
+            <p class="success-message" id="successMessage">Profile updated successfully!</p>
+        </form>
+    </div>
+
+    <!-- Navigation Buttons
+    <div class="navigation-buttons">
+        <button id="prevButton" onclick="navigatePrevious()">Previous</button>
+        <button id="nextButton" onclick="navigateNext()">Next</button>
+    </div> -->
+
+    <script>
+        // Function to load profile data into the form
+        function loadProfileData() {
+            const profileData = JSON.parse(localStorage.getItem('userDetails'));
+
+            if (profileData) {
+                document.getElementById('firstName').value = profileData.firstName || '';
+                document.getElementById('middleName').value = profileData.middleName || '';
+                document.getElementById('lastName').value = profileData.lastName || '';
+                document.getElementById('email').value = profileData.email || '';
+                document.getElementById('contact').value = profileData.contact || '';
+                document.getElementById('bio').value = profileData.bio || '';
+                document.getElementById('year').value = profileData.year || '';
+                document.getElementById('department').value = profileData.department || '';
+            }
+        }
+
+        // Function to save profile data
+        function saveProfile(event) {
+            event.preventDefault();
+
+            const profileData = {
+                firstName: document.getElementById('firstName').value,
+                middleName: document.getElementById('middleName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                contact: document.getElementById('contact').value,
+                bio: document.getElementById('bio').value,
+                year: document.getElementById('year').value,
+                department: document.getElementById('department').value,
+                profileImage: document.getElementById('profileImage').files[0] ? document.getElementById('profileImage').files[0].name : ''
+            };
+
+            // Save updated profile data to localStorage
+            localStorage.setItem('userDetails', JSON.stringify(profileData));
+
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+
+            // Redirect to StudentProfile.html after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'StudentProfile.html';
+            }, 2000);
+        }
+
+        // Load profile data when the page loads
+        window.onload = loadProfileData;
+
+        // // Navigation Functionality
+        // const pageSequence = [
+        //     'home.html',
+        //     'MyGroups.html',
+        //     'PlagiarismDetection.html',
+        //     'FeedbackGrading.html',
+        //     'GuideProfile.html',
+        //     'EditGuideProfile.html',
+        // ];
+
+        // const currentPage = window.location.pathname.split('/').pop();
+        // const currentIndex = pageSequence.indexOf(currentPage);
+
+        // function navigatePrevious() {
+        //     if (currentIndex > 0) {
+        //         window.location.href = pageSequence[currentIndex - 1];
+        //     }
+        // }
+
+        // function navigateNext() {
+        //     if (currentIndex < pageSequence.length - 1) {
+        //         window.location.href = pageSequence[currentIndex + 1];
+        //     }
+        // }
+
+        // // Disable Previous button if on the first page
+        // if (currentIndex === 0) {
+        //     document.getElementById('prevButton').disabled = true;
+        // }
+
+        // // Disable Next button if on the last page
+        // if (currentIndex === pageSequence.length - 1) {
+        //     document.getElementById('nextButton').disabled = true;
+        // }
+
+        // Profile Dropdown Functionality
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.classList.toggle('show');
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.profile-icon')) {
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            }
+        };
+
+        // Function to handle Sign In
+        function signIn() {
+            alert("Sign In functionality will be implemented here.");
+            // Redirect to a sign-in page or show a sign-in modal
+        }
+
+        // Function to handle Sign Out
+        function signOut() {
+            alert("Sign Out functionality will be implemented here.");
+            // Clear session and redirect to the login page
+            localStorage.removeItem('userDetails'); // Clear profile data
+            window.location.href = "login.html"; // Replace with your login page
+        }
+    </script>
+    <!-- Back Button -->
+    <a class="back-button" href="javascript:history.back()">⬅ Back</a>
+
+    <script>
+        function openModal() {
+            document.getElementById("taskModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("taskModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>

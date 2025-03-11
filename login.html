@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlagiScan - Sign Up & Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f5f7fa;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        /* Branding Section */
+        .branding {
+            flex: 1;
+            background: linear-gradient(90deg, #007BFF, #0056b3);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .branding h1 {
+            font-size: 24px;
+        }
+
+        /* Form Section */
+        .form-container {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 10px;
+            color: #007BFF;
+            cursor: pointer;
+        }
+
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            color: green;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Scrollable Form Section */
+        .scrollable-form {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Branding Section -->
+        <div class="branding">
+            <img src="image.png.png" alt="PlagiScan Logo" >
+            <h1>PlagiScan</h1>
+            <p>Ensuring Originality, Elevating Integrity.</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="form-container" id="registrationFormContainer">
+            <form id="registerForm" onsubmit="return handleRegister(event)" enctype="multipart/form-data">
+                <h2>Register</h2>
+                <div class="scrollable-form">
+                    <div class="form-group">
+                        <label for="regUserType">User Type:</label>
+                        <select id="regUserType" required onchange="toggleRegistrationFields()">
+                            <option value="student">Student</option>
+                            <option value="guide">Guide</option>
+                            <option value="project-coordinator">Project Coordinator</option>
+                        </select>
+                    </div>
+
+                    <!-- Common Fields -->
+                    <div class="form-group">
+                        <label for="regFirstName">First Name:</label>
+                        <input type="text" id="regFirstName" required>
+                    </div>
+                    <div class="form-group" id="middleNameField" style="display: none;">
+                        <label for="regMiddleName">Middle Name:</label>
+                        <input type="text" id="regMiddleName">
+                    </div>
+                    <div class="form-group">
+                        <label for="regLastName">Last Name:</label>
+                        <input type="text" id="regLastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email:</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password:</label>
+                        <input type="password" id="regPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirm Password:</label>
+                        <input type="password" id="regConfirmPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regContact">Contact:</label>
+                        <input type="text" id="regContact" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regBio">Bio (Optional):</label>
+                        <textarea id="regBio"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="regProfileImage">Profile Image (Optional):</label>
+                        <input type="file" id="regProfileImage" accept="image/*">
+                    </div>
+
+                    <!-- Student-Specific Fields -->
+                    <div id="studentFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="regYear">Year:</label>
+                            <input type="number" id="regYear" min="1" max="4">
+                        </div>
+                        <div class="form-group">
+                            <label for="regDivision">Division:</label>
+                            <input type="text" id="regDivision">
+                        </div>
+                        <div class="form-group">
+                            <label for="regRollNo">Roll No:</label>
+                            <input type="text" id="regRollNo">
+                        </div>
+                        <div class="form-group">
+                            <label for="regPRN">PRN No:</label>
+                            <input type="text" id="regPRN">
+                        </div>
+                    </div>
+
+                    <!-- Guide/Project Coordinator-Specific Fields -->
+                    <div id="guideFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="regDepartment">Department:</label>
+                            <input type="text" id="regDepartment">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit">Register</button>
+                <p class="toggle-link" onclick="toggleForms()">Already have an account? Login Here.</p>
+                <p class="success-message" id="successMessage">Registration Successful! Redirecting...</p>
+            </form>
+        </div>
+
+        <!-- Login Form -->
+        <div class="form-container" id="loginFormContainer" style="display: none;">
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit">Login</button>
+                <p class="toggle-link" onclick="toggleForms()">Don't have an account? Register Here.</p>
+                <p class="success-message" id="loginSuccessMessage">Login Successful! Redirecting...</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to handle registration
+        function handleRegister(event) {
+            event.preventDefault();
+            const userType = document.getElementById('regUserType').value;
+            const firstName = document.getElementById('regFirstName').value;
+            const middleName = document.getElementById('regMiddleName').value;
+            const lastName = document.getElementById('regLastName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const contact = document.getElementById('regContact').value;
+            const bio = document.getElementById('regBio').value;
+            const profileImage = document.getElementById('regProfileImage').files[0];
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match. Please try again.');
+                return;
+            }
+
+            let userDetails = {
+                userType,
+                firstName,
+                middleName,
+                lastName,
+                email,
+                password,
+                contact,
+                bio,
+                profileImage: profileImage ? profileImage.name : null
+            };
+
+            if (userType === 'student') {
+                userDetails.year = document.getElementById('regYear').value;
+                userDetails.division = document.getElementById('regDivision').value;
+                userDetails.rollNo = document.getElementById('regRollNo').value;
+                userDetails.prn = document.getElementById('regPRN').value;
+            } else if (userType === 'guide' || userType === 'project-coordinator') {
+                userDetails.department = document.getElementById('regDepartment').value;
+            }
+
+            // Store user details in localStorage
+            localStorage.setItem('userDetails', JSON.stringify(userDetails));
+            localStorage.setItem('userType', userType); // Store user type for dashboard
+
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+
+            // Redirect to dashboard.html after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+
+        // Function to handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Retrieve user details from localStorage
+            const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+
+            if (userDetails && userDetails.email === email && userDetails.password === password) {
+                // Show success message
+                const loginSuccessMessage = document.getElementById('loginSuccessMessage');
+                loginSuccessMessage.style.display = 'block';
+
+                // Redirect to dashboard.html after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            } else {
+                alert('Invalid email or password. Please try again.');
+            }
+        }
+
+        // Function to toggle registration fields based on user type
+        function toggleRegistrationFields() {
+            const userType = document.getElementById('regUserType').value;
+            const studentFields = document.getElementById('studentFields');
+            const guideFields = document.getElementById('guideFields');
+            const middleNameField = document.getElementById('middleNameField');
+
+            if (userType === 'student') {
+                studentFields.style.display = 'block';
+                guideFields.style.display = 'none';
+                middleNameField.style.display = 'block'; // Show Middle Name for students
+            } else {
+                studentFields.style.display = 'none';
+                guideFields.style.display = 'block';
+                middleNameField.style.display = 'none'; // Hide Middle Name for others
+            }
+        }
+
+        // Function to toggle between registration and login forms
+        function toggleForms() {
+            const registrationFormContainer = document.getElementById('registrationFormContainer');
+            const loginFormContainer = document.getElementById('loginFormContainer');
+
+            if (registrationFormContainer.style.display === 'none') {
+                registrationFormContainer.style.display = 'block';
+                loginFormContainer.style.display = 'none';
+            } else {
+                registrationFormContainer.style.display = 'none';
+                loginFormContainer.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

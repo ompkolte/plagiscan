@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - PlagiScan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-img {
+            height: 40px;  /* Adjust logo size */
+            width: auto;
+        }
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+        .nav a {
+            text-decoration: none;
+            color: white;
+            padding: 8px 15px;
+            background: #007BFF;
+            border-radius: 5px;
+        }
+        .nav a:hover {
+            background: #0056b3;
+        }
+
+        /* Home Section */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+        .text-section {
+            width: 50%;
+            padding: 20px;
+            text-align: left;
+        }
+        .text-section h1 {
+            color: #0056b3;
+            font-size: 36px;
+        }
+        .text-section p {
+            color: #333;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .highlight {
+            color: #007BFF;
+            font-weight: bold;
+        }
+
+        /* Image */
+        .image-section {
+            width: 50%;
+        }
+        .image-section img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 50px;
+            font-size: 14px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="header">
+        <div class="logo-container">
+            <img src="image.png.png" alt="PlagiScan Logo" class="logo-img">
+            <span class="site-name">PlagiScan</span>
+        </div>
+        <div class="nav">
+            <a href="home.html" style="background: #0056b3;">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <!-- Welcome Section -->
+    <div class="container">
+        <div class="text-section">
+            <h1>Welcome To PlagiScan</h1>
+            <p>PlagiScan is an innovative platform designed to streamline project management while ensuring academic originality.</p>
+            <p>Whether you're a student submitting projects, a faculty member evaluating submissions, or an administrator overseeing institutional standards, PlagiScan provides all the tools you need in one place.</p>
+            <p class="highlight">Your Trusted Partner for Project Integrity</p>
+        </div>
+        <div class="image-section">
+            <img src="OIP.jpg" alt="People discussing project">
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">© 2025 PlagiScan. All rights reserved.</div>
+
+</body>
+</html>

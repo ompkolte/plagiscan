@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Task - PlagiScan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            transition: background 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            color: white;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, transform 0.3s;
+        }
+        .dark-mode .container {
+            background: rgba(50, 50, 50, 0.5);
+        }
+        h2, h3 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .task-list {
+            margin-bottom: 20px;
+        }
+        .task {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 5px 0;
+            transition: transform 0.2s;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .dark-mode .task {
+            background: rgba(100, 100, 100, 0.5);
+        }
+        .task:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.35);
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.3);
+            cursor: pointer;
+        }
+        .progress-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            height: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #ffffff;
+            transition: width 0.3s ease-in-out;
+            border-radius: 5px;
+        }
+        .dark-mode .progress-container {
+            background: rgba(100, 100, 100, 0.5);
+        }
+        .submission-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .plagiarism-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .text-check {
+            width: 100%;
+            height: 120px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            resize: none;
+            transition: border-color 0.3s;
+        }
+        .text-check:focus {
+            border-color: #eeeeee;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        .btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
+        }
+        .btn:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        .dark-mode .btn {
+            background: #0056b3;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+    <div class="container">
+        <h3>📋 Project Tasks</h3>
+        <!-- <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="task-list">
+            <div class="task">
+                <label><input type="checkbox" class="task-checkbox" onchange="updateProgress()"> Research & Analysis <span>Due: Jan 20</span></label>
+            </div>
+        </div> -->
+        <div class="submission-section">
+            <h3>Upload File</h3>
+            <input type="file" id="fileUpload" />
+            <button class="btn" onclick="submitFiles()">Submit</button>
+            <p id="filePreview">No file selected</p>
+        </div>
+        <div class="plagiarism-section">
+            <h3>Plagiarism Check</h3>
+            <textarea id="textInput" class="text-check" placeholder="Enter text here..."></textarea>
+            <button class="btn" onclick="checkPlagiarism()">Check</button>
+            <p id="plagiarismResult"></p>
+        </div>
+    </div>
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            const total = checkboxes.length;
+            const checked = [...checkboxes].filter(cb => cb.checked).length;
+            document.getElementById('progressBar').style.width = (checked / total) * 100 + '%';
+        }
+        function submitFiles() {
+            const file = document.getElementById('fileUpload').files[0];
+            document.getElementById('filePreview').innerText = file ? `Selected: ${file.name}` : 'No file selected';
+        }
+        function checkPlagiarism() {
+            const text = document.getElementById("textInput").value;
+            document.getElementById("plagiarismResult").innerText = text.length > 100 ? "Plagiarism detected (Simulated)." : "No plagiarism detected.";
+        }
+    </script>
+    <!-- Back Button -->
+    <a class="back-button" href="javascript:history.back()">⬅ Back</a>
+
+    <script>
+        function openModal() {
+            document.getElementById("taskModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("taskModal").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>

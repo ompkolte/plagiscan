@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Grading - PlagiScan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback-section {
+            margin-bottom: 30px;
+        }
+
+        .feedback-section h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .student-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .student-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-name {
+            flex: 1;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .grade-input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .grade-input:focus {
+            border-color: #007BFF;
+        }
+
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .navigation-buttons button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .navigation-buttons button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .navigation-buttons button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        } */
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f5f7fa;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Feedback Grading</h1>
+        <div class="profile-dropdown">
+            <div class="profile-icon" onclick="toggleDropdown()">
+                👤
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="GuideProfile.html">Account Details</a>
+                <a href="login.html" onclick="signIn()">Sign In</a>
+                <a href="login.html" onclick="signOut()">Sign Out</a>
+                <a href="EditGuideProfile.html">Edit Account</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Add Group Members Section -->
+        <div class="feedback-section">
+            <h2>Add Group Members</h2>
+            <div id="addMemberSection">
+                <input type="text" id="memberName" placeholder="Enter member name" class="grade-input">
+                <button onclick="addMember()">Add Member</button>
+            </div>
+        </div>
+
+        <!-- Feedback and Grading Section -->
+        <div class="feedback-section">
+            <h2>Grade Your Group Members</h2>
+            <div class="student-list" id="studentList">
+                <!-- Student items will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons
+    <div class="navigation-buttons">
+        <button id="prevButton" onclick="navigatePrevious()">Previous</button>
+        <button id="nextButton" onclick="navigateNext()">Next</button>
+    </div> -->
+
+    <script>
+        // Data to store group members and their grades
+        let groupMembers = [];
+        let grades = {};
+
+        // Function to add a new group member
+        function addMember() {
+            const memberName = document.getElementById('memberName').value.trim();
+            if (memberName) {
+                groupMembers.push(memberName);
+                renderStudentList();
+                document.getElementById('memberName').value = ''; // Clear input
+            } else {
+                alert("Please enter a valid member name.");
+            }
+        }
+
+        // Function to render the student list
+        function renderStudentList() {
+            const studentList = document.getElementById('studentList');
+            studentList.innerHTML = ''; // Clear existing list
+
+            groupMembers.forEach((member, index) => {
+                const studentItem = document.createElement('div');
+                studentItem.className = 'student-item';
+
+                const studentName = document.createElement('span');
+                studentName.className = 'student-name';
+                studentName.textContent = member;
+
+                const assignmentInput = document.createElement('input');
+                assignmentInput.type = 'text';
+                assignmentInput.className = 'grade-input';
+                assignmentInput.placeholder = 'Assignment No.';
+                assignmentInput.id = `assignment-${index}`;
+
+                const gradeInput = document.createElement('input');
+                gradeInput.type = 'text';
+                gradeInput.className = 'grade-input';
+                gradeInput.placeholder = 'Grade';
+                gradeInput.id = `grade-${index}`;
+
+                const saveButton = document.createElement('button');
+                saveButton.textContent = 'Save';
+                saveButton.onclick = () => saveGrade(index);
+
+                studentItem.appendChild(studentName);
+                studentItem.appendChild(assignmentInput);
+                studentItem.appendChild(gradeInput);
+                studentItem.appendChild(saveButton);
+
+                studentList.appendChild(studentItem);
+            });
+        }
+
+        // Function to save grades
+        function saveGrade(index) {
+            const assignmentNo = document.getElementById(`assignment-${index}`).value.trim();
+            const grade = document.getElementById(`grade-${index}`).value.trim();
+
+            if (assignmentNo && grade) {
+                const member = groupMembers[index];
+                if (!grades[member]) {
+                    grades[member] = {};
+                }
+                grades[member][assignmentNo] = grade;
+                alert(`Grade saved for ${member} - Assignment ${assignmentNo}: ${grade}`);
+            } else {
+                alert("Please enter both assignment number and grade.");
+            }
+        }
+
+        // // Navigation Functionality
+        // const pageSequence = [
+        //     'MyGroups.html',          // My Groups
+        //     'PlagiarismDetection.html', // Plagiarism Detection
+        //     'FeedbackGrading.html',      // Feedback and Grades
+        //     'GuideProfile.html',       // Profile
+        //     'EditGuideProfile.html'              // Settings
+        // ];
+
+        // const currentPage = window.location.pathname.split('/').pop();
+        // const currentIndex = pageSequence.indexOf(currentPage);
+
+        // function navigatePrevious() {
+        //     if (currentIndex > 0) {
+        //         window.location.href = pageSequence[currentIndex - 1];
+        //     }
+        // }
+
+        // function navigateNext() {
+        //     if (currentIndex < pageSequence.length - 1) {
+        //         window.location.href = pageSequence[currentIndex + 1];
+        //     }
+        // }
+
+        // Disable Previous button if on the first page
+        if (currentIndex === 0) {
+            document.getElementById('prevButton').disabled = true;
+        }
+
+        // Disable Next button if on the last page
+        if (currentIndex === pageSequence.length - 1) {
+            document.getElementById('nextButton').disabled = true;
+        }
+
+        // Profile Dropdown Functionality
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.classList.toggle('show');
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.profile-icon')) {
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            }
+        };
+
+        // Function to handle Sign In
+        function signIn() {
+            alert("Sign In functionality will be implemented here.");
+            window.location.href = "login.html"; 
+        }
+
+        // Function to handle Sign Out
+        function signOut() {
+            alert("Sign Out functionality will be implemented here.");
+            localStorage.removeItem('userDetails'); // Clear profile data
+            window.location.href = "login.html"; // Replace with your login page
+        }
+    </script>
+    <!-- Back Button -->
+    <a class="back-button" href="javascript:history.back()">⬅ Back</a>
+
+    <script>
+        function openModal() {
+            document.getElementById("taskModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("taskModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>
